@@ -1,0 +1,47 @@
+{
+  "generated_at": "2026-01-17T04:23:55.352960",
+  "total_bugs": 245,
+  "total_projects": 16,
+  "by_project": {
+    "llvm___llvm-project": 143,
+    "danmar___cppcheck": 32,
+    "CESNET___libyang": 15,
+    "fmtlib___fmt": 14,
+    "KhronosGroup___SPIRV-Tools": 12,
+    "apache___arrow": 9,
+    "CLIUtils___CLI11": 3,
+    "facebook___rocksdb": 3,
+    "libevent___libevent": 3,
+    "nanomsg___nng": 3,
+    "skypjack___entt": 2,
+    "uncrustify___uncrustify": 2,
+    "DynamoRIO___dynamorio": 1,
+    "SOCI___soci": 1,
+    "awslabs___aws-c-common": 1,
+    "zeromq___libzmq": 1
+  },
+  "by_bug_type": {
+    "Logic Organization: Improper Condition Organization": 66,
+    "Sanitizer: Control Expression Error": 64,
+    "Signature: Incorrect Variable Usage": 25,
+    "Logic Organization: Wrong Function Call Sequence": 20,
+    "Signature: Incorrect Function Return Value": 19,
+    "Signature: Incorrect Function Usage": 19,
+    "Signature: Fault Input Type": 12,
+    "Memory Error: Uncontrolled Resource Consumption": 9,
+    "Memory Error: Null Pointer Dereference": 6,
+    "Memory Error: Memory Overflow": 5
+  },
+  "by_bug_type_id": {
+    "D.1": 66,
+    "B": 64,
+    "A.4": 25,
+    "D.2": 20,
+    "A.3": 19,
+    "A.1": 19,
+    "A.2": 12,
+    "C.2": 9,
+    "C.1": 6,
+    "C.3": 5
+  }
+}

@@ -11,6 +11,7 @@ import json
 import os
 import re
 import time
+import ssl
 from pathlib import Path
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
@@ -21,10 +22,11 @@ import difflib
 class SourceCodeExtractor:
     """源代码提取器"""
 
-    def __init__(self, output_dir="bug_source_code", use_cache=True):
+    def __init__(self, output_dir="bug_source_code", use_cache=True, no_ssl_verify=False):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
         self.use_cache = use_cache
+        self.no_ssl_verify = no_ssl_verify
         self.stats = {
             'total': 0,
             'success': 0,
@@ -36,6 +38,13 @@ class SourceCodeExtractor:
         (self.output_dir / 'source_files').mkdir(exist_ok=True)
         (self.output_dir / 'diffs').mkdir(exist_ok=True)
         (self.output_dir / 'functions').mkdir(exist_ok=True)
+
+        # 创建 SSL 上下文
+        if self.no_ssl_verify:
+            self.ssl_context = ssl._create_unverified_context()
+            print("⚠️  警告: SSL 证书验证已禁用")
+        else:
+            self.ssl_context = None
 
     def parse_github_url(self, repo_url):
         """从 GitHub URL 中提取 owner 和 repo 名称"""
@@ -61,7 +70,7 @@ class SourceCodeExtractor:
             try:
                 # 添加 User-Agent 避免被拒绝
                 req = Request(url, headers={'User-Agent': 'Mozilla/5.0'})
-                with urlopen(req, timeout=10) as response:
+                with urlopen(req, timeout=10, context=self.ssl_context) as response:
                     content = response.read().decode('utf-8')
                     return content
             except HTTPError as e:
@@ -358,10 +367,12 @@ def main():
                         help='输出目录 (默认: bug_source_code)')
     parser.add_argument('--limit', '-l', type=int, default=None,
                         help='限制提取数量（用于测试）')
+    parser.add_argument('--no-ssl-verify', action='store_true',
+                        help='禁用 SSL 证书验证（解决证书错误，不推荐）')
 
     args = parser.parse_args()
 
-    extractor = SourceCodeExtractor(output_dir=args.output_dir)
+    extractor = SourceCodeExtractor(output_dir=args.output_dir, no_ssl_verify=args.no_ssl_verify)
 
     print("=" * 80)
     print("Bug 源代码提取工具")
